@@ -1,0 +1,22 @@
+﻿Build started 2014-04-29 18:41:17.
+     1>Project "c:\Users\Paweł\documents\visual studio 2010\Projects\AirHockey_klient\AirHockey_klient\AirHockey_klient.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Release\AirHockey_klient.unsuccessfulbuild".
+       ClCompile:
+         All outputs are up-to-date.
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"c:\users\paweł\documents\visual studio 2010\Projects\AirHockey_klient\Release\AirHockey_klient.exe" /INCREMENTAL:NO /NOLOGO ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\AirHockey_klient.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"c:\users\paweł\documents\visual studio 2010\Projects\AirHockey_klient\Release\AirHockey_klient.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\users\paweł\documents\visual studio 2010\Projects\AirHockey_klient\Release\AirHockey_klient.lib" /MACHINE:X86 Release\AirHockey_klient.obj
+         Release\cKlient.obj
+         Generating code
+         Finished generating code
+         AirHockey_klient.vcxproj -> c:\users\paweł\documents\visual studio 2010\Projects\AirHockey_klient\Release\AirHockey_klient.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"c:\users\paweł\documents\visual studio 2010\Projects\AirHockey_klient\Release\AirHockey_klient.exe;#1" /manifest Release\AirHockey_klient.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Release\AirHockey_klient.unsuccessfulbuild".
+         Touching "Release\AirHockey_klient.lastbuildstate".
+     1>Done Building Project "c:\Users\Paweł\documents\visual studio 2010\Projects\AirHockey_klient\AirHockey_klient\AirHockey_klient.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.76

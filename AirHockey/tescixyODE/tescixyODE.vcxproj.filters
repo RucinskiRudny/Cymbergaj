@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="drawstuff">
+      <UniqueIdentifier>{ea080c8f-55a1-4bda-884a-221f17617fab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="drawstuff\src">
+      <UniqueIdentifier>{29e3f3fb-6cd9-4169-8d81-21c02e531145}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Visual\ode-0.13\drawstuff\src\windows.cpp">
+      <Filter>drawstuff\src</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Visual\ode-0.13\drawstuff\src\drawstuff.cpp">
+      <Filter>drawstuff\src</Filter>
+    </ClCompile>
+    <ClCompile Include="cSerwer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="F:\Visual\ode-0.13\drawstuff\src\Makefile.am">
+      <Filter>drawstuff\src</Filter>
+    </None>
+    <None Include="F:\Visual\ode-0.13\drawstuff\src\Makefile.in">
+      <Filter>drawstuff\src</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="F:\Visual\ode-0.13\drawstuff\src\resource.h">
+      <Filter>drawstuff\src</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Visual\ode-0.13\drawstuff\src\internal.h">
+      <Filter>drawstuff\src</Filter>
+    </ClInclude>
+    <ClInclude Include="cSerwer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="F:\Visual\ode-0.13\drawstuff\src\resources.rc">
+      <Filter>drawstuff\src</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
