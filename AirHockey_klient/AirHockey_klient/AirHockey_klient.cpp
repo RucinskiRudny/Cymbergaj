@@ -10,7 +10,7 @@ sRamkaV ramka;
 
 int main (int argc, char **argv)
 {
-	cKlient* klient = new cKlient("127.0.0.1",10000);
+	cKlient* klient = new cKlient("127.0.0.1",11000);
 	klient->polacz();
 	a=1;
 

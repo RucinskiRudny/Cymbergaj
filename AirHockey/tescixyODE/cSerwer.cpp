@@ -27,7 +27,7 @@ exit(-1);
 sockaddr_in service;
 service.sin_family = AF_INET;
 service.sin_addr.s_addr = ADDR_ANY; //wybierany domy±lny adres IP serwera
-service.sin_port = htons ( 10000 ) ; //nr portu
+service.sin_port = htons ( 11000 ) ; //nr portu
 if( bind ( m_socket , (SOCKADDR*) &service,sizeof(service) ) == SOCKET_ERROR )
 {
 printf( "blad funkcji bind ( ) . \ n" ) ;
@@ -65,13 +65,16 @@ ilu=i+1;
 void cSerwer::PobierzV(sRamkaV* Predkosci)
 {
 	sRamkaV V;
+	char bufor[8];
 	int buforIN,buforOUT=5;
 	fd_set wejscie;
 	timeval czas;
 	czas.tv_sec=3;
 	czas.tv_usec=0;
 	int pom,ilosc=0;
+	int pom2;
 	bool przyszla=true;
+	float otrzymana[2];
 
 		for(int i=0;i<ilu;i++)
 		wejscie.fd_array[i]=tablica[i];
@@ -79,11 +82,24 @@ void cSerwer::PobierzV(sRamkaV* Predkosci)
 		pom=select(ilu,&wejscie,NULL,NULL,&czas);
 		for(int i=0;i<pom;i++)
 			{
-				recv(wejscie.fd_array[i],(char*)&V,sizeof(V),0);
+				
 				if(wejscie.fd_array[i]==tablica[0])
+				{
+					if(recv(wejscie.fd_array[i],(char*)&V,sizeof(V),0)>0);
 					Predkosci[0]=V;
+				}
 				else
-					Predkosci[1]=V;
+				{
+					
+					if(recv(wejscie.fd_array[i],bufor,sizeof(bufor),0)>0);
+					{
+						memcpy(otrzymana, bufor, 2*sizeof(float));
+						pom2=1;
+						Predkosci[1].xV=otrzymana[0];
+						Predkosci[1].yV=otrzymana[1];
+						Predkosci[1].zV=0;
+					}
+				}
 			}
 
 }

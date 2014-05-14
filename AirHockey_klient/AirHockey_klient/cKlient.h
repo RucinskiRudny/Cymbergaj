@@ -5,9 +5,9 @@
 
 struct sRamkaV
 {
-int xV;
-int yV;
-int zV;
+float xV;
+float yV;
+float zV;
 };
 
 
