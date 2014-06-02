@@ -984,13 +984,13 @@ containing a value of this type.
         public static final int ic_launcher=0x7f020057;
     }
     public static final class id {
-        public static final int Adres=0x7f050045;
+        public static final int Adres=0x7f050042;
         public static final int NazwaX1=0x7f05003d;
-        public static final int NazwaX2=0x7f05003e;
-        public static final int NazwaY1=0x7f05003f;
-        public static final int NazwaY2=0x7f050040;
-        public static final int Polacz=0x7f050047;
-        public static final int Port=0x7f050046;
+        public static final int NazwaX2=0x7f050044;
+        public static final int NazwaY1=0x7f05003e;
+        public static final int NazwaY2=0x7f050045;
+        public static final int Polacz=0x7f050043;
+        public static final int Port=0x7f050041;
         public static final int Reset=0x7f050048;
         public static final int action_bar=0x7f05001c;
         public static final int action_bar_activity_content=0x7f050015;
@@ -1049,10 +1049,10 @@ containing a value of this type.
         public static final int split_action_bar=0x7f05001e;
         public static final int submit_area=0x7f050039;
         public static final int tabMode=0x7f050002;
-        public static final int textView1=0x7f050041;
-        public static final int textView2=0x7f050042;
-        public static final int textView3=0x7f050043;
-        public static final int textView4=0x7f050044;
+        public static final int textView1=0x7f05003f;
+        public static final int textView2=0x7f050040;
+        public static final int textView3=0x7f050046;
+        public static final int textView4=0x7f050047;
         public static final int title=0x7f05002b;
         public static final int top_action_bar=0x7f050020;
         public static final int up=0x7f050021;
@@ -1109,8 +1109,9 @@ containing a value of this type.
         public static final int abc_search_dropdown_item_icons_2line=0x7f030015;
         public static final int abc_search_view=0x7f030016;
         public static final int activity_air_hockey=0x7f030017;
-        public static final int fragment_air_hockey=0x7f030018;
-        public static final int support_simple_spinner_dropdown_item=0x7f030019;
+        public static final int activity_air_hockey22=0x7f030018;
+        public static final int fragment_air_hockey=0x7f030019;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001a;
     }
     public static final class menu {
         public static final int air_hockey=0x7f0c0000;

@@ -49,14 +49,14 @@ if(i==0)
 	}
 }
 SOCKET AcceptSocket ;
-printf( " serwer oczekuje na polaczenie klienta \ n" ) ;
+printf( " serwer oczekuje na polaczenie klienta... \n" ) ;
 
 AcceptSocket = SOCKET_ERROR;
 while ( AcceptSocket == SOCKET_ERROR )
 {
 AcceptSocket = accept ( m_socket , NULL, NULL ) ;
 }
-printf( "Klient polaczony. \ n" ) ;
+printf( "Klient polaczony. \n" ) ;
 
 tablica[i]=AcceptSocket;
 ilu=i+1;
@@ -85,22 +85,27 @@ void cSerwer::PobierzV(sRamkaV* Predkosci)
 				
 				if(wejscie.fd_array[i]==tablica[0])
 				{
-					if(recv(wejscie.fd_array[i],(char*)&V,sizeof(V),0)>0);
-					Predkosci[0]=V;
+					if(recv(wejscie.fd_array[i],bufor,sizeof(bufor),0)>0);
+					{
+						memcpy(otrzymana, bufor, 2*sizeof(float));
+						Predkosci[0].xV=otrzymana[0]/15;
+						Predkosci[0].yV=otrzymana[1]/15;
+						
+					}
 				}
 				else
 				{
 					
-					if(recv(wejscie.fd_array[i],bufor,sizeof(bufor),0)>0);
+					if((pom2=recv(wejscie.fd_array[i],bufor,sizeof(bufor),0))>0);
 					{
 						memcpy(otrzymana, bufor, 2*sizeof(float));
-						pom2=1;
-						Predkosci[1].xV=otrzymana[0];
-						Predkosci[1].yV=otrzymana[1];
-						Predkosci[1].zV=0;
+						//pom2=1;
+						Predkosci[1].xV=otrzymana[0]/15;
+						Predkosci[1].yV=otrzymana[1]/15;
 					}
 				}
 			}
+
 
 }
 

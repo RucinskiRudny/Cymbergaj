@@ -1,10 +1,8 @@
-
-
 #ifndef dSINGLE
 #define dSINGLE
 #endif
 
-
+bool reset=false;
 #include <ode/odeconfig.h>
 #include <assert.h>
 #ifdef HAVE_UNISTD_H
@@ -15,12 +13,17 @@
 #include "cSerwer.h"
 
 
+
 #ifdef _MSC_VER
 #pragma warning(disable:4244 4305)  // for VC++, no precision loss complaints
 #endif
 
+int licznik=0;
+int wynikGora=0;
+int wynikDol=0;
+bool bramkaGora=false;
+bool bramkaDol=false;
 
-// dynamics and collision objects (chassis, 3 wheels, environment)
 
 static dWorldID world;
 static dSpaceID space;
@@ -36,14 +39,12 @@ static dGeomID krazekgeom;
 
 static bool ruch=false;
 
-static dBodyID bandabody[12];
+static dBodyID bandabody[12]; //7 i 6 bramki
 static dGeomID bandageom[12];
 
 sRamkaV Predkosci[2];
 cSerwer serwer;
 
-//static dBodyID testbody;
-//static dGeomID testgeom;
 
 static dJointGroupID contactgroup;
 
@@ -67,6 +68,8 @@ static bool show_contacts = false;
 #define XPOCZ 6.0
 #define YPOCZ 10.0
 
+#define LIMIT 3
+
 
 // this is called by dSpaceCollide when two objects in space are
 // potentially colliding.
@@ -86,7 +89,17 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
     return;
   }
 
-  const int N = 32;
+  
+  if((o1==krazekgeom&&o2==bandageom[7])||(o2==krazekgeom&&o1==bandageom[7]))
+	bramkaGora=true;
+
+  if((o1==krazekgeom&&o2==bandageom[6])||(o2==krazekgeom&&o1==bandageom[6]))
+	bramkaDol=true;
+	  
+  
+
+
+  const int N = 30;
   dContact contact[N];
   int n = dCollide (o1,o2,N,&(contact[0].geom),sizeof(dContact));
 
@@ -100,20 +113,6 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 	  contact[i].surface.bounce_vel = 0.0001;
       dJointID c = dJointCreateContact (world,contactgroup,&contact[i]);
       dJointAttach (c, dGeomGetBody(contact[i].geom.g1), dGeomGetBody(contact[i].geom.g2));
-      if (show_contacts) 
-      {
-        dMatrix3 RI;
-        dRSetIdentity (RI);
-        const dReal ss[3] = {0.12,0.12,0.12};
-        dsSetColorAlpha (0,0,1,0.5);
-        dsDrawBox (contact[i].geom.pos,RI,ss);
-        dReal *pos  = contact[i].geom.pos;
-        dReal depth = contact[i].geom.depth;
-        dReal *norm = contact[i].geom.normal;
-        dReal endp[3] = {pos[0]+depth*norm[0], pos[1]+depth*norm[1], pos[2]+depth*norm[2]};
-        dsSetColorAlpha (1,1,1,1);
-        dsDrawLine (contact[i].geom.pos, endp);
-      }
     }
   }
 }
@@ -125,9 +124,11 @@ static void start()
 {
   dAllocateODEDataForThread(dAllocateMaskAll);
 
-  static float xyz[3] = {3.2,10,20};
-  static float hpr[3] = {-90.0000f,-70.0000f,0.0000f};
+  static float xyz[3] = {5.9466972,14.602594,16.059916};
+  static float hpr[3] = {-90.0000f,-78.0000f,0.0000f};
   dsSetViewpoint (xyz,hpr);
+  printf("Zerowanie wynikow kalwiszem 'R': \n" );
+  printf("Wyniki: \n" );
 
 }
 
@@ -135,39 +136,34 @@ static void start()
 // called when a key pressed
 
 static void command (int cmd)
-{/*
+{
   switch (cmd) 
   {
     case ' ':
       break;
 
-	case 'w': case 'W':
+	case 'r': case 'R':
 		{
-		dBodySetLinearVel  (zbijak1body, 0, -10, 0);
-		ruch=true;
-		break;
+			wynikGora=0;
+			wynikDol=0;
+			//system("cls");
+			//printf("Zerowanie wynikow kalwiszem 'R': \n" );
+			printf("Wyniki: \n" );
+			dReal* pozycja=new dReal[3];
+			const dReal* bandapoz=dBodyGetPosition(bandabody[7]);
+			const dReal* bandapoz2=dBodyGetPosition(bandabody[6]);
+			pozycja[0]=bandapoz[0];
+			pozycja[1]=bandapoz[1]+6;
+			pozycja[2]=0;
+			dBodySetPosition(krazekbody,pozycja[0],pozycja[1],pozycja[2]);
+			pozycja[1]=bandapoz[1]+2;
+			dBodySetPosition(zbijak1body,pozycja[0],pozycja[1],pozycja[2]);
+			pozycja[1]=bandapoz2[1]-2;
+			dBodySetPosition(zbijak2body,pozycja[0],pozycja[1],pozycja[2]);
+			dBodySetLinearVel(krazekbody,0,0,0);
+			break;
 		}
-
-	case 's': case 'S':
-		{
-		dBodySetLinearVel  (zbijak1body, 0, 10, 0);
-		ruch=true;
-		break;
-		}
-	case 'a': case 'A':
-		{
-		dBodySetLinearVel  (zbijak1body, 10, 0, 0);
-		ruch=true;
-		break;
-		}
-
-	case 'd': case 'D':
-		{
-		dBodySetLinearVel  (zbijak1body, -10, 0, 0);
-		ruch=true;
-		break;
-		}
-  }*/
+  }
 }
 
 
@@ -179,6 +175,7 @@ static void simLoop (int pause)
   /*if(!ruch)
   dBodySetLinearVel(zbijak1body, 0, 0, 0);
   ruch=false;*/
+	Sleep(5);
 	serwer.PobierzV(Predkosci);
 	dBodySetLinearVel(zbijak1body, Predkosci[0].xV, Predkosci[0].yV, 0);
 	dBodySetLinearVel(zbijak2body, Predkosci[1].xV, Predkosci[1].yV, 0);
@@ -195,11 +192,83 @@ static void simLoop (int pause)
   dBodySetRotation(krazekbody,R);
   dBodySetPosition(krazekbody,krazekpoz[0],krazekpoz[1],0);
 
+  const dReal* zbijak1poz=dBodyGetPosition(zbijak1body);
+  dReal pozycjaY;
+  dBodySetRotation(zbijak1body,R);
+  if(zbijak1poz[1]>(YPOCZ-CYLRADIUS))
+	  pozycjaY=YPOCZ-CYLRADIUS;
+  else
+	  pozycjaY=zbijak1poz[1];
+  dBodySetPosition(zbijak1body,zbijak1poz[0],pozycjaY,0);
+
+  const dReal* zbijak2poz=dBodyGetPosition(zbijak2body);
+  if(zbijak2poz[1]<(YPOCZ+CYLRADIUS))
+	  pozycjaY=YPOCZ+CYLRADIUS;
+  else
+	  pozycjaY=zbijak2poz[1];
+  dBodySetRotation(zbijak2body,R);
+  dBodySetPosition(zbijak2body,zbijak2poz[0],pozycjaY,0);
+
+  if(dBodyGetLinearVel(krazekbody)[0]>LIMIT)
+	  dBodySetLinearVel(krazekbody,10,dBodyGetLinearVel(krazekbody)[1],0);
+
+  if(dBodyGetLinearVel(krazekbody)[0]<-LIMIT)
+	  dBodySetLinearVel(krazekbody,-LIMIT,dBodyGetLinearVel(krazekbody)[1],0);
+
+  if(dBodyGetLinearVel(krazekbody)[1]<-LIMIT)
+	  dBodySetLinearVel(krazekbody,dBodyGetLinearVel(krazekbody)[0],-LIMIT,0);
+
+  if(dBodyGetLinearVel(krazekbody)[1]>LIMIT)
+	  dBodySetLinearVel(krazekbody,dBodyGetLinearVel(krazekbody)[0],LIMIT,0);
+
+  //obs³uga bramek:
+  if(bramkaGora)
+  {
+	wynikDol++;
+	dReal* pozycja=new dReal[3];
+	const dReal* bandapoz=dBodyGetPosition(bandabody[7]);
+	const dReal* bandapoz2=dBodyGetPosition(bandabody[6]);
+	pozycja[0]=bandapoz[0];
+	pozycja[1]=bandapoz[1]+6;
+	pozycja[2]=0;
+	dBodySetPosition(krazekbody,pozycja[0],pozycja[1],pozycja[2]);
+	pozycja[1]=bandapoz[1]+2;
+	dBodySetPosition(zbijak1body,pozycja[0],pozycja[1],pozycja[2]);
+	pozycja[1]=bandapoz2[1]-2;
+	dBodySetPosition(zbijak2body,pozycja[0],pozycja[1],pozycja[2]);
+	dBodySetLinearVel(krazekbody,0,0,0);
+	Sleep(1000);
+	bramkaGora=false;
+	printf("Dolny %i : %i Gorny \n",wynikDol,wynikGora );
+  }
+
+    if(bramkaDol)
+  {
+	wynikGora++;
+	dReal* pozycja=new dReal[3];
+	const dReal* bandapoz=dBodyGetPosition(bandabody[6]);
+	const dReal* bandapoz2=dBodyGetPosition(bandabody[7]);
+	pozycja[0]=bandapoz[0];
+	pozycja[1]=bandapoz[1]-6;
+	pozycja[2]=0;
+	dBodySetPosition(krazekbody,pozycja[0],pozycja[1],pozycja[2]);
+	pozycja[1]=bandapoz[1]+-2;
+	dBodySetPosition(zbijak2body,pozycja[0],pozycja[1],pozycja[2]);
+	pozycja[1]=bandapoz2[1]+2;
+	dBodySetPosition(zbijak1body,pozycja[0],pozycja[1],pozycja[2]);
+	dBodySetLinearVel(krazekbody,0,0,0);
+	Sleep(1000);
+	bramkaDol=false;
+	printf("Dolny %i : %i Gorny \n",wynikDol,wynikGora );
+  }
+
+
+	  
 
   dSpaceCollide (space,0,&nearCallback);  
   if (!pause)
   {
-    dWorldQuickStep (world, 0.01); // 100 Hz
+    dWorldQuickStep (world, 0.05); 
   }
   dJointGroupEmpty (contactgroup);
 
@@ -216,7 +285,9 @@ static void simLoop (int pause)
     crot,
     CYLLENGTH,
     CYLRADIUS
-  ); // single precision
+  );
+
+  dsSetColorAlpha (0,1,0,1);
 
     const dReal *C2Pos = dBodyGetPosition(zbijak2body);
   const dReal *C2Rot = dBodyGetRotation(zbijak2body);
@@ -228,7 +299,9 @@ static void simLoop (int pause)
     c2rot,
     CYLLENGTH,
     CYLRADIUS
-  ); // single precision
+  ); 
+
+    dsSetColorAlpha (1,0,0,1);
 
   const dReal *KPos = dBodyGetPosition(krazekbody);
   const dReal *KRot = dBodyGetRotation(krazekbody);
@@ -240,7 +313,7 @@ static void simLoop (int pause)
     krot,
     KRAZEKWYS,
     KRAZEKPROMIEN
-  ); // single precision
+  ); 
 
 
 
@@ -328,7 +401,7 @@ int main (int argc, char **argv)
   space = dHashSpaceCreate (0);
   contactgroup = dJointGroupCreate (0);
   dWorldSetGravity (world,0,0,-5);
-  dWorldSetQuickStepNumIterations (world, 32);
+  dWorldSetQuickStepNumIterations (world, 5);
   dWorldSetAutoDisableAngularThreshold(world,10000);
   //dWorldSetCFM (world,100);
   
@@ -459,10 +532,11 @@ int main (int argc, char **argv)
   dBodySetPosition(bandabody[10],XPOCZ+BANDADLUG/DZIELNIK2/2+BANDADLUG/DZIELNIK1-0.2*BANDASZER,YPOCZ+BANDADLUG/2-BANDASZER-0.2*BANDASZER,BANDAWYS/2-0.5);
   dBodySetPosition(bandabody[11],XPOCZ-BANDADLUG/DZIELNIK2/2-BANDADLUG/DZIELNIK1+0.2*BANDASZER,YPOCZ-BANDADLUG/2+BANDASZER+0.2*BANDASZER,BANDAWYS/2-0.5);
   
-
-
+  //ograniczenia predkosci
+  //dBodySetLinearDampingThreshold(krazekbody, 1);
 
   // run simulation
+  system("cls");
   dsSimulationLoop (argc,argv,800,600,&fn);
   
   dJointGroupEmpty (contactgroup);
@@ -481,133 +555,3 @@ int main (int argc, char **argv)
   dCloseODE();
   return 0;
 }
-
-
-
-
-
-
-
-
-
-/*
-#ifndef dSINGLE
-#define dSINGLE
-#endif
-
-#include <ode/ode.h>
-#include <iostream>
-#include <stdio.h>
-#include <drawstuff/drawstuff.h>
-#include <windows.h>
-// dynamics and collision objects
-static dWorldID world;
-static dSpaceID space;
-static dBodyID body;	
-static dGeomID geom;	
-static dMass m;
-static dJointGroupID contactgroup;
-
-
-static void start()
-{
-	dAllocateODEDataForThread(dAllocateMaskAll);
-    static float xyz[3] = {2.0f,-2.0f,1.7600f};
-    static float hpr[3] = {140.000f,-17.0000f,0.0000f};
-    dsSetViewpoint (xyz,hpr);
-}
-
-static void nearCallback (void *data, dGeomID o1, dGeomID o2)
-{
-    dBodyID b1 = dGeomGetBody(o1);
-    dBodyID b2 = dGeomGetBody(o2);
-    dContact contact;  
-    contact.surface.mode = 0;
-    // friction parameter
-    contact.surface.mu = 50.0;
-    // bounce is the amount of "bouncyness".
-    contact.surface.bounce = 0;
-    // bounce_vel is the minimum incoming velocity to cause a bounce
-    contact.surface.bounce_vel = 0.1;
-    // constraint force mixing parameter
-    contact.surface.soft_cfm = 0;  
-    if (int numc = dCollide (o1,o2,1,&contact.geom,sizeof(dContact))) {
-        dJointID c = dJointCreateContact (world,contactgroup,&contact);
-        dJointAttach (c,b1,b2);
-    }
-}
-
-static void simLoop (int pause)
-{
-    const dReal *pos;
-    const dReal *R;
-    // find collisions and add contact joints
-    dSpaceCollide (space,0,&nearCallback);
-    // step the simulation
-    dWorldQuickStep (world,0.01);  
-    // remove all contact joints
-    dJointGroupEmpty (contactgroup);
-    // redraw sphere at new location
-    pos = dGeomGetPosition (geom);
-    R = dGeomGetRotation (geom);
-    dsDrawCylinder (pos,R,0.5,0.5);
-}
-
-int main (int argc, char **argv)
-{
-    // setup pointers to drawstuff callback functions
-	dReal R[12];
-	
-	for(int i=0; i<12; i++)
-		R[i]=0;
-	
-	R[0]=1;
-	R[6]=1;
-	R[9]=-1;
-
-    dsFunctions fn;
-    fn.version = DS_VERSION;
-    fn.start = &start;
-    fn.step = &simLoop;
-    fn.stop = 0;
-    fn.command = 0;
-    fn.path_to_textures = "D:/Dokumenty/Visual Studio 2010/ode-0.13/drawstuff/textures";
- 
-    dInitODE ();
-    // create world
-	dInitODE2(0);
-    world = dWorldCreate ();
-    space = dHashSpaceCreate (0);
-    dWorldSetGravity (world,0,0,-9.2);
-    dWorldSetCFM (world,0);
-    dCreatePlane (space,0,0,1,0);
-    contactgroup = dJointGroupCreate (0);
-    // create object
-	dQuaternion q;
-	dQFromAxisAndAngle (q,1,0,0, M_PI * -0.77);
-    body = dBodyCreate (world);
-	dBodySetQuaternion (body,q);
-    geom = dCreateCylinder (0,0.5,0.5);
-    dMassSetCylinder (&m,1.0,3,0.5,0.5);
-    dBodySetMass (body,&m);
-    dGeomSetBody (geom,body);
-	dSpaceAdd(space,geom);
-    // set initial position
-    dBodySetPosition (body,0,0,0.6);
-	//dBodySetRotation (body,R);
-    // run simulation
-    dsSimulationLoop (argc,argv,352,288,&fn);
-    // clean up
-    dJointGroupDestroy (contactgroup);
-    dSpaceDestroy (space);
-    dWorldDestroy (world);
-    dCloseODE();
-    return 0;
-}*/
-/*
-int main (int argc, char **argv)
-{
-
-	return 0;
-}
-*/

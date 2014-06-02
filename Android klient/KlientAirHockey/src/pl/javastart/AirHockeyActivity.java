@@ -13,7 +13,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -34,25 +33,22 @@ public class AirHockeyActivity extends ActionBarActivity {
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
 	TextView PrzyspieszenieX;
-	TextView PredkoscX;
 	TextView PrzyspieszenieY;
-	TextView PredkoscY;
 	Button polacz;
 	Button reset;
 	Context context;
 	EditText adres;
 	EditText port;
-	long czas=0;
-	long czasPop=0;
-	long czasRoz=0;
+
 	float predkoscX;
 	float predkoscY;
 	byte[] paczka=new byte[8];
 	byte[] Xbyte=new byte[4];
 	byte[] Ybyte=new byte[4];
-	float akcelerometrX;
-	float akcelerometrY;
 	int licznik=0;
+	int licznik2=0;
+	boolean polaczony=false;
+
 	
 	private Socket socket; 
 	private static int SERVERPORT;
@@ -65,39 +61,30 @@ public class AirHockeyActivity extends ActionBarActivity {
 		    public void onAccuracyChanged(Sensor sensor, int accuracy) { }
 
 		    public void onSensorChanged(SensorEvent event) {
-		    	//string X = Float.toString(event.values[0]);
-		    	//if(event.values[0]>0.5||event.values[0]<-0.5)
-		    	PrzyspieszenieX.setText(String.valueOf(event.values[0]));
-		    	PrzyspieszenieY.setText(String.valueOf(event.values[0]));
-		    	//else
-		    	//	naazwaX.setText("stoi");
-		    	akcelerometrX=event.values[0];
-		    	//akcelerometrY=event.values[1];
-		    	akcelerometrY=event.values[1];
-		    	/*
-		    	if(akcelerometrX<0.3&&akcelerometrX>-0.3)
-		    		akcelerometrX=0;
-		    	if(akcelerometrY<0.3&&akcelerometrY>-0.3)
-		    		akcelerometrY=0;*/
 		    	
-		    	czas=SystemClock.uptimeMillis();
-		    	czasRoz=czas-czasPop;
-		    	czasPop=czas;
+		    	PrzyspieszenieX.setText(String.valueOf(event.values[1]));
+		    	PrzyspieszenieY.setText(String.valueOf(event.values[2]));
+		    	if(event.values[1]<45)
+		    		predkoscX=event.values[1];
+		    	else
+		    		predkoscX=45;
 		    	
-		    	predkoscX=predkoscX+akcelerometrX*czasRoz*(float)0.001;
-		    	PredkoscX.setText(String.valueOf(predkoscX));
+		    	if(event.values[1]<-45)
+		    		predkoscX=-45;
 		    	
-		    	predkoscY=predkoscY+akcelerometrY*czasRoz*(float)0.001;
-		    	PredkoscY.setText(String.valueOf(predkoscY));
+		    	if(event.values[2]<45)
+		    		predkoscY=event.values[2];
+		    	else
+		    		predkoscY=45;
 		    	
-		    	//odbs³uga klienta
+		    	if(event.values[2]<-45)
+		    		predkoscY=-45;
+
 		    	licznik++;
-		    	if(licznik==50)
-		    	try {
-		    						licznik=0;        
-		    			           /* PrintWriter out = new PrintWriter(new BufferedWriter(
-		    			                    new OutputStreamWriter(socket.getOutputStream())),
-		    			                    true);*/
+		    	
+		    	try { 
+		    						licznik=0;
+		    						licznik2++;
 		    			            BufferedOutputStream out = new BufferedOutputStream(socket.getOutputStream());
 		    			            Xbyte=toByteArray(predkoscX);
 		    			            Ybyte=toByteArray(predkoscY);
@@ -105,6 +92,8 @@ public class AirHockeyActivity extends ActionBarActivity {
 		    			            paczka[4]=Ybyte[3]; paczka[5]=Ybyte[2]; paczka[6]=Ybyte[1]; paczka[7]=Ybyte[0];
 		    			            out.write(paczka);
 		    			            out.flush();
+		    			            
+		    			         
 		    			        } catch (UnknownHostException e) {
 		    			            e.printStackTrace();
 		    			        } catch (IOException e) {
@@ -129,37 +118,26 @@ public class AirHockeyActivity extends ActionBarActivity {
 		context = getApplicationContext();
 			
 		PrzyspieszenieX = (TextView) findViewById(R.id.NazwaX1);
-		PredkoscX = (TextView) findViewById(R.id.NazwaX2);
 		PrzyspieszenieY = (TextView) findViewById(R.id.NazwaY1);
-		PredkoscY = (TextView) findViewById(R.id.NazwaY2);
 		polacz = (Button) findViewById(R.id.Polacz);
-		reset = (Button) findViewById(R.id.Reset);
 		port = (EditText)findViewById(R.id.Port);
 		adres = (EditText)findViewById(R.id.Adres);
-		czas=SystemClock.uptimeMillis();
-		czasPop=czas;
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-		mSensorManager.registerListener(mSensorEventListener, mSensor, SensorManager.SENSOR_DELAY_FASTEST);
+		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+		mSensorManager.registerListener(mSensorEventListener, mSensor, SensorManager.SENSOR_DELAY_GAME);
 		
 		polacz.setOnClickListener(new OnClickListener() {			 
             public void onClick(View v) {
-            	SERVER_IP=adres.getText().toString();
-            	String portstring=port.getText().toString();
-            	SERVERPORT=Integer.parseInt(portstring);
-            	new Thread(new ClientThread()).start();
+            	if(!polaczony)
+            	{
+            		polaczony=true;
+            		SERVER_IP=adres.getText().toString();
+            		String portstring=port.getText().toString();
+            		SERVERPORT=Integer.parseInt(portstring);
+            		new Thread(new ClientThread()).start();
+            	}
             }
 		});
-		
-		reset.setOnClickListener(new OnClickListener() {			 
-            public void onClick(View v) {
-            	predkoscX=0;
-            	predkoscY=0;
-            }
-		});
-
-		
-		
 		
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
@@ -207,6 +185,20 @@ public class AirHockeyActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+
+	
+	@Override
+	public void onBackPressed() {
+		/*try {
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		System.exit(1);
+	    return;
+	}  
 
 	/**
 	 * A placeholder fragment containing a simple view.

@@ -1,9 +1,9 @@
-﻿Build started 2014-04-29 18:45:20.
+﻿Build started 2014-06-02 21:51:00.
      1>Project "C:\Users\Paweł\Documents\Visual Studio 2010\Projects\AirHockey\tescixyODE\tescixyODE.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\AirHockey.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"F:\Visual\ode-0.13\ode\src" /I"F:\Visual\ode-0.13\include" /I"F:\Visual\ode-0.13\drawstuff\src" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"F:\Visual\ode-0.13\ode\src" /I"F:\Visual\ode-0.13\include" /I"F:\Visual\ode-0.13\drawstuff\src" /ZI /nologo /W3 /WX- /MP /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
          main.cpp
        ResourceCompile:
          All outputs are up-to-date.
@@ -29,4 +29,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.38
+Time Elapsed 00:00:03.24

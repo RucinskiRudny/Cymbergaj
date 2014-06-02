@@ -3,6 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="top"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -20,15 +21,6 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/NazwaX2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="100dp"
-        android:text="@string/NazwaY"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-    
-        <TextView
         android:id="@+id/NazwaY1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,72 +30,32 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/NazwaY2"
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:text="Prędkość X"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="2.1mm" />
+
+    <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="150dp"
-        android:layout_marginTop="100dp"
-        android:text="@string/NazwaY"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-   		<TextView
-   		    android:id="@+id/textView1"
-   		    android:layout_width="wrap_content"
-   		    android:layout_height="wrap_content"
-   		    android:layout_marginLeft="10dp"
-   		    android:layout_marginTop="20dp"
-   		    android:text="Przyspieszenie X"
-   		    android:textAppearance="?android:attr/textAppearanceLarge"
-   		    android:textSize="2.1mm" />
-    
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="150dp"
-            android:layout_marginTop="20dp"
-            android:text="Przyspieszenie Y"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="2.1mm" />
-        
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="80dp"
-            android:text="Prędkość X"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="2.1mm" />
-        
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="150dp"
-            android:layout_marginTop="80dp"
-            android:text="Prędkość Y"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="2.1mm" />
-        
-         <EditText
-        android:id="@+id/Adres"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="178dp"
-        android:layout_marginLeft="38dp"
-        android:ems="10"
-        android:hint="Tutaj podaj IP" />
+        android:layout_marginTop="20dp"
+        android:text="Prędkość Y"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="2.1mm" />
 
     <EditText
         android:id="@+id/Port"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/Adres"
-        android:layout_alignTop="@+id/Adres"
-        android:layout_marginTop="41dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/Adres"
+        android:layout_marginRight="14dp"
         android:ems="10"
         android:hint="Tutaj podaj port" />
 
@@ -111,23 +63,21 @@
         android:id="@+id/Polacz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/Port"
         android:layout_below="@+id/Port"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginLeft="62dp"
         android:text="Połącz" />
 
-    <Button
-        android:id="@+id/Reset"
+    <EditText
+        android:id="@+id/Adres"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Polacz"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-        android:text="Kalibruj" />
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignLeft="@+id/Port"
+        android:ems="10"
+        android:hint="Tutaj podaj IP" >
 
-
-        
-        
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>
-
